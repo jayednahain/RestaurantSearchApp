@@ -102,6 +102,13 @@ android {
         versionName "1.0"
     }
 
+     externalNativeBuild {
+        cmake {
+            version rootProject.ext.cmakeVersion
+        }
+    }
+
+
     splits {
         abi {
             reset()
