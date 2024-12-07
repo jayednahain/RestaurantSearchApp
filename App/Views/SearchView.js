@@ -9,7 +9,10 @@ export default function SearchView() {
         <View>
             <SearchBar
                 searchKeyWord={searchKeyWord}
-                onTypingChange={(text) => setSearchKeyWord(text)}
+                onTextChange={(text) => setSearchKeyWord(text)}
+                onTextSubmitted={()=>{
+                    console.warn("SUBMITTED")
+                }}
             />
         </View>
     )

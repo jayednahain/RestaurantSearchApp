@@ -4,9 +4,6 @@ import AppNavigation from './App/AppNavigation/AppNavigation'
 
 export default function App() {
 	return (
-		// <View>
-		// 	<Text>Hellow</Text>
-		// </View>
 		<AppNavigation/>
 	)
 }

@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TextInput, View } from 'react-native'
 import React from 'react';
 
-export default function SearchBar({searchKeyWordValue ,onTypingChange}) {
+export default function SearchBar({searchKeyWordValue ,onTextChange ,onTextSubmitted}) {
     return (
         <View>
             
@@ -16,7 +16,8 @@ export default function SearchBar({searchKeyWordValue ,onTypingChange}) {
                     
                 }}
                 placeholder='Search Product'
-                onChangeText={onTypingChange}
+                onChangeText={onTextChange}
+                onEndEditing={onTextSubmitted}
 
             />
         </View>
