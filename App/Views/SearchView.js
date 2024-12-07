@@ -6,14 +6,25 @@ import DummyJsonService from '../Service/DummyJsonService';
 export default function SearchView() {
     const [searchKeyWord, setSearchKeyWord] = useState("");
     const [responseList, setResponseList] = useState("");
+    const [errorMessage , setErrorMessage] = useState("")
     //'https://dummyjson.com/products/search?q=phone'
     
     const searchApi = async () => {
-        const response = await DummyJsonService.get('/search',{
-            q : searchKeyWord
-        })
-        console.log("response : ", JSON.stringify(response.data.products.length))
-        setResponseList(response.data.products)
+        try{
+            const response = await DummyJsonService.get('/search',{ q : searchKeyWord })
+            setResponseList(response.data.products)
+        }
+        catch(error) { 
+            setErrorMessage(`${error}`)
+        }    
+    }
+
+    renderView = () =>{
+        return (
+            <View>
+                <Text>{errorMessage}</Text>
+            </View>
+        );
     }
     
 
@@ -27,6 +38,7 @@ export default function SearchView() {
                 }}
             />
            <Text> `total {responseList.length}`</Text>
+           {errorMessage && renderView()}
         </View>
     )
 }
