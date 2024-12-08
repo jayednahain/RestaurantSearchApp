@@ -1,10 +1,11 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import { fontStyle } from './Style'
 
-export default function SearchResultList() {
+export default function SearchResultList({ title }) {
     return (
         <View>
-            <Text>SearchResultList</Text>
+            <Text style={fontStyle.boldTitle}>{title}</Text>
         </View>
     )
 }
