@@ -9,7 +9,11 @@ export default function SearchView() {
     const [searchKeyWord, setSearchKeyWord] = useState("");
     const [responseList, setResponseList] = useState([]);
     const [responseCategoryList, setCategoryList] = useState([]);
-    const [errorMessage, setErrorMessage] = useState("")
+    const [errorMessage, setErrorMessage] = useState("");
+    // const [isLoading, setIsLoading] = useState(true);
+    // const [isCategoryLoading, setIsCategoryLoading] = useState(true);
+
+
 
     useEffect(() => {
         searchApi()
@@ -17,11 +21,11 @@ export default function SearchView() {
     }, [])
 
     const searchApi = async () => {
+
         try {
             const response = await DummyJsonService.get('search', {
                 params: { q: searchKeyWord },
             });
-            console.log("Response received: ", response.data.products);
             setResponseList(response.data.products);
 
         }
@@ -33,7 +37,6 @@ export default function SearchView() {
     const getAllCategory = async () => {
         try {
             const response = await DummyJsonService.get('category-list', {});
-            console.log("Response getAllCategory received: ", response.data);
             setCategoryList(response.data)
         }
         catch (error) {
@@ -51,7 +54,7 @@ export default function SearchView() {
 
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1 , paddingLeft:20 , backgroundColor:'white' }}>
             <SearchBar
                 searchKeyWord={searchKeyWord}
                 onTextChange={(text) => setSearchKeyWord(text)}

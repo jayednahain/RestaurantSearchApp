@@ -3,7 +3,7 @@ import React from 'react';
 
 export default function SearchBar({searchKeyWordValue ,onTextChange ,onTextSubmitted}) {
     return (
-        <View>
+        <View style ={{paddingRight:20}}> 
             
             <TextInput
                 value={searchKeyWordValue}

@@ -12,14 +12,15 @@ export default function SearchResultList({ title, filteredProductList }) {
         );
     };
     return (
-        <View>
-            <Text style={fontStyle.boldTitle}>{title}</Text>
+        <View style={{marginBottom:5}}>
+            <Text style={[fontStyle.boldTitle,{marginBottom:2}]}>{title}</Text>
             <FlatList
                 horizontal={true}
                 data={filteredProductList}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={renderProductItem}
                 showsHorizontalScrollIndicator={false}
+                
             />  
         </View>
     )
