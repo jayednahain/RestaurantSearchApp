@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import SearchBar from '../Components/SearchBar'
 import DummyJsonService from '../Service/DummyJsonService';
@@ -35,7 +35,6 @@ export default function SearchView() {
             const response = await DummyJsonService.get('category-list', {});
             console.log("Response getAllCategory received: ", response.data);
             setCategoryList(response.data)
-
         }
         catch (error) {
             setErrorMessage(`${error}`)
@@ -64,20 +63,23 @@ export default function SearchView() {
             
             {errorMessage && renderView()}
 
+            <ScrollView>
+                {responseCategoryList.map((categoryItem) => {
+                    const filteredProducts = responseList.filter(productItem => productItem.category === categoryItem);
 
-            {responseCategoryList.map((categoryItem) => {
-                const filteredProducts = responseList.filter(productItem => productItem.category === categoryItem);
-
-                if (filteredProducts.length > 0) {
-                    return (
-                        <SearchResultList
-                            key={categoryItem}
-                            title={categoryItem}
-                        />
-                    );
-                }
-                return null; 
-            })}
+                    if (filteredProducts.length > 0) {
+                        return (
+                            <SearchResultList
+                                key={categoryItem}
+                                title={categoryItem}
+                                filteredProductList ={filteredProducts}
+                            />
+                        );
+                    }
+                    return null; 
+                })}
+            </ScrollView>
+            
         </View>
     )
 }
