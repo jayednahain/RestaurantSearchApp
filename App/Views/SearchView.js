@@ -21,7 +21,6 @@ export default function SearchView() {
     }, [])
 
     const searchApi = async () => {
-
         try {
             const response = await DummyJsonService.get('search', {
                 params: { q: searchKeyWord },
