@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { FlatList, ScrollView, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import SearchBar from '../Components/SearchBar'
 import DummyJsonService from '../Service/DummyJsonService';
@@ -12,8 +12,6 @@ export default function SearchView() {
     const [errorMessage, setErrorMessage] = useState("");
     // const [isLoading, setIsLoading] = useState(true);
     // const [isCategoryLoading, setIsCategoryLoading] = useState(true);
-
-
 
     useEffect(() => {
         searchApi()
@@ -51,9 +49,26 @@ export default function SearchView() {
         );
     }
 
+    const flatListData = responseCategoryList.map(categoryItem => {
+
+            const filteredProducts = responseList.filter(
+                productItem => productItem.category === categoryItem
+            );
+            
+            if (filteredProducts.length > 0) {
+                return {
+                    category: categoryItem,
+                    filteredProducts,
+                };
+            }
+            
+            return null;
+        })
+        .filter(item => item !== null);
+
 
     return (
-        <View style={{ flex: 1 , paddingLeft:20 , backgroundColor:'white' }}>
+        <View style={{ flex: 1, paddingLeft: 20, backgroundColor: 'white' }}>
             <SearchBar
                 searchKeyWord={searchKeyWord}
                 onTextChange={(text) => setSearchKeyWord(text)}
@@ -61,26 +76,20 @@ export default function SearchView() {
                     searchApi()
                 }}
             />
-            {/* <Text style={fontStyle.boldTitle}> `total {responseList.length}`</Text> */}
             
             {errorMessage && renderView()}
-
-            <ScrollView>
-                {responseCategoryList.map((categoryItem) => {
-                    const filteredProducts = responseList.filter(productItem => productItem.category === categoryItem);
-
-                    if (filteredProducts.length > 0) {
-                        return (
+            <FlatList
+                data={flatListData}
+                keyExtractor={(item) => item.category}
+                renderItem={({ item }) => (
                             <SearchResultList
-                                key={categoryItem}
-                                title={categoryItem}
-                                filteredProductList ={filteredProducts}
+                        navigation = {props.navigation}
+                        key={item.category}
+                        title={item.category}
+                        filteredProductList={item.filteredProducts}
                             />
-                        );
-                    }
-                    return null; 
-                })}
-            </ScrollView>
+                )}
+            />
             
         </View>
     )
