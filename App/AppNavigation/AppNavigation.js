@@ -2,18 +2,22 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import SearchView from "../Views/SearchView";
+import SearchDetailsView from "../Views/SearchDetailsView";
 
 const Stack = createStackNavigator();
 
-const navigationOption = (navigation) => {
-    return {
-        headerShadowVisible: false,
-        headerTitleAlign: 'center',
         // headerTitle: () => <H5 textTitle={title} />,
         // headerLeft: () => <ButtonPrimaryNavBarRounded onPress={() => {
         //     console.warn("ButtonPrimaryNavBarRoundedButtonPrimaryNavBarRounded")
         //     navigation.goBack() 
         // }} />
+
+
+const navigationOption = (navigation) => {
+    return {
+        headerShadowVisible: false,
+        headerTitleAlign: 'center',
+
     }
 } 
 
@@ -25,9 +29,12 @@ const AppNavigation = () => {
                     name="SearchView"
                     component={SearchView}
                     options={({ navigation})=>navigationOption(navigation)}
-
                     />
-                {/* <Stack.Screen name="UserOtp" component={UserOtp} /> */}
+                <Stack.Screen 
+                    name="SearchDetailsView" 
+                    component={SearchDetailsView}   
+                    options={({ navigation})=>navigationOption(navigation)}
+                    />
             </Stack.Navigator>
         </NavigationContainer>
     );

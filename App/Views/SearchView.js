@@ -5,7 +5,7 @@ import DummyJsonService from '../Service/DummyJsonService';
 import SearchResultList from '../Components/SearchResultList';
 import { fontStyle } from '../Components/Style';
 
-export default function SearchView() {
+export default function SearchView(props) {
     const [searchKeyWord, setSearchKeyWord] = useState("");
     const [responseList, setResponseList] = useState([]);
     const [responseCategoryList, setCategoryList] = useState([]);

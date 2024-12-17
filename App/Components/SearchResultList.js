@@ -3,14 +3,19 @@ import React from 'react'
 import { fontStyle } from './Style'
 import ProductListItem from './ProductListItem';
 
-export default function SearchResultList({ title, filteredProductList }) {
+export default function SearchResultList({ title, filteredProductList,navigation }) {
     
-      const renderProductItem = ({ item }) => {
+    const renderProductItem = ({ item }) => {
         return (
             // <Text>{item.title}</Text>
-            <ProductListItem item={item} />
+            <ProductListItem
+                onPressCardItem={() => {
+                    navigation.navigate('SearchDetailsView')
+                }}
+                item={item} />
         );
     };
+
     return (
         <View style={{marginBottom:5}}>
             <Text style={[fontStyle.boldTitle,{marginBottom:2}]}>{title}</Text>
@@ -20,7 +25,6 @@ export default function SearchResultList({ title, filteredProductList }) {
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={renderProductItem}
                 showsHorizontalScrollIndicator={false}
-                
             />  
         </View>
     )
