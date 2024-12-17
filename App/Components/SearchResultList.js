@@ -2,16 +2,14 @@ import { FlatList, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { fontStyle } from './Style'
 import ProductListItem from './ProductListItem';
+import { useNavigation } from '@react-navigation/native';
 
-export default function SearchResultList({ title, filteredProductList,navigation }) {
-    
+export default function SearchResultList({ title, filteredProductList }) {
+    const navigation = useNavigation();
     const renderProductItem = ({ item }) => {
         return (
-            // <Text>{item.title}</Text>
             <ProductListItem
-                onPressCardItem={() => {
-                    navigation.navigate('SearchDetailsView')
-                }}
+                onPressCardItem={() => {navigation.navigate('SearchDetailsView')}}
                 item={item} />
         );
     };

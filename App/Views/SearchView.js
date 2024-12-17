@@ -3,9 +3,8 @@ import React, { useEffect, useState } from 'react'
 import SearchBar from '../Components/SearchBar'
 import DummyJsonService from '../Service/DummyJsonService';
 import SearchResultList from '../Components/SearchResultList';
-import { fontStyle } from '../Components/Style';
 
-export default function SearchView(props) {
+function SearchView(props) {
     const [searchKeyWord, setSearchKeyWord] = useState("");
     const [responseList, setResponseList] = useState([]);
     const [responseCategoryList, setCategoryList] = useState([]);
@@ -82,17 +81,19 @@ export default function SearchView(props) {
                 data={flatListData}
                 keyExtractor={(item) => item.category}
                 renderItem={({ item }) => (
-                            <SearchResultList
-                        navigation = {props.navigation}
+                    <SearchResultList
+                        // navigation={props.navigation}
                         key={item.category}
                         title={item.category}
                         filteredProductList={item.filteredProducts}
-                            />
+                    />
                 )}
             />
-            
+
         </View>
     )
 }
+
+export default  SearchView;
 
 const styles = StyleSheet.create({})
