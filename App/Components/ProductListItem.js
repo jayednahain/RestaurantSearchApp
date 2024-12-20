@@ -4,15 +4,15 @@ import React from 'react'
 export default function ProductListItem({ item , onPressCardItem }) {
     
     
-    capitalizeFirstLetter = (world) =>{
-        return String(world[0]).toUpperCase() + String(world).slice(1);
-    }
+
 
     let { title, thumbnail, rating, reviews } = item ;
     return (
         <TouchableOpacity disabled= {onPressCardItem ?false :true} onPress={onPressCardItem} style={styles.cardContainer}>
             <Image style={{ width: 150, height: 100, alignSelf: 'center', borderRadius: 5 }} source={{ uri: thumbnail }} />
-            <Text style={{ width: 130, fontWeight: '600', fontSize: 14, color: 'black' }} ellipsizeMode='tail' numberOfLines={1} >{ capitalizeFirstLetter(title)}</Text>
+            <Text style={{ width: 130, fontWeight: '600', fontSize: 14, color: 'black' }} 
+            ellipsizeMode='tail' numberOfLines={1} >{ 
+                title}</Text>
             <Text style={{ fontSize: 10 }}>Rating {rating} , Reviews {reviews.length} </Text>
         </TouchableOpacity>
     )
