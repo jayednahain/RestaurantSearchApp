@@ -18,7 +18,7 @@ export default function SearchResultList({ title, filteredProductList }) {
 
     return (
         <View style={{marginBottom:5}}>
-            <H3 textTitle={UtilityFunctions.getSentenceWithUpperCaseFirstLetter(`${title} extra`)} textStyle={{fontWeight:'800', color:'black',marginTop:4, marginBottom:2}}/>
+            <H3 textTitle={UtilityFunctions.getSentenceWithUpperCaseFirstLetter(`${title} extra`)} textStyle={styles.categoryTitleStyle}/>
             <FlatList
                 horizontal={true}
                 data={filteredProductList}
@@ -30,4 +30,8 @@ export default function SearchResultList({ title, filteredProductList }) {
     )
 }
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    categoryTitleStyle:{
+        fontWeight:'800', color:'black',marginTop:4, marginBottom:2
+    }
+})

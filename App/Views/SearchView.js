@@ -13,13 +13,31 @@ function SearchView(props) {
     // const [isCategoryLoading, setIsCategoryLoading] = useState(true);
 
     useEffect(() => {
-        searchApi()
-        getAllCategory()
+        // getAllProducts()
+        getSearchedProductList()
+        getAllProductCategory()
     }, [])
 
-    const searchApi = async () => {
+    //getSearchedProductList
+
+    ///products
+
+    const getAllProducts = async () =>{
         try {
-            const response = await DummyJsonService.get('search', {
+
+            // https://dummyjson.com/products
+            const response = await DummyJsonService.get('products', {});
+            setResponseList(response.data.products);
+
+        }
+        catch (error) {
+            setErrorMessage(`${error}`)
+        }
+    }
+
+    const getSearchedProductList = async () => {
+        try {
+            const response = await DummyJsonService.get('products/search', {
                 params: { q: searchKeyWord },
             });
             setResponseList(response.data.products);
@@ -30,9 +48,9 @@ function SearchView(props) {
         }
     }
 
-    const getAllCategory = async () => {
+    const getAllProductCategory = async () => {
         try {
-            const response = await DummyJsonService.get('category-list', {});
+            const response = await DummyJsonService.get('products/category-list', {});
             setCategoryList(response.data)
         }
         catch (error) {
@@ -72,7 +90,7 @@ function SearchView(props) {
                 searchKeyWord={searchKeyWord}
                 onTextChange={(text) => setSearchKeyWord(text)}
                 onTextSubmitted={() => {
-                    searchApi()
+                    getSearchedProductList()
                 }}
             />
             
