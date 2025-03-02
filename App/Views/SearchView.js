@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import SearchBar from '../Components/SearchBar'
 import DummyJsonService from '../Service/DummyJsonService';
 import SearchResultList from '../Components/SearchResultList';
+import { H1 } from '../AppTheme';
 
 function SearchView(props) {
     const [searchKeyWord, setSearchKeyWord] = useState("");
@@ -25,17 +26,20 @@ function SearchView(props) {
 
     const getAllProductAndProductCategory = async () => {
         setIsLoading(true);
-        const promiseProduct = DummyJsonService.get('products/search', {
-            params: { q: searchKeyWord },
-        });
+        const promiseProduct = DummyJsonService.get('products/searc', {params: { q: searchKeyWord }});
         const promiseCategory = DummyJsonService.get('products/category-list', {});
+
         await Promise.all([promiseProduct, promiseCategory])
             .then(([productResponse, categoryResponse]) => {
+                console.log("productResponse : ", productResponse)
+
                 setResponseList(productResponse.data.products);
                 setCategoryList(categoryResponse.data);
-            }).catch(() => {
-                setErrorMessage("error!");
+            
+            }).catch((error) => {
+                setErrorMessage(error.message);
                 console.log("error!")
+                console.log("productResponse : ", error)
             })
             .finally(() => {
                 setIsLoading(false);
@@ -58,7 +62,7 @@ function SearchView(props) {
     const renderView = () => {
         return (
             <View style={{ flex: 1 }}>
-                <Text>asdasdasdasd</Text>
+                <H1 textTitle={errorMessage}></H1>
             </View>
         );
     }
@@ -90,7 +94,7 @@ function SearchView(props) {
 
             {isLoading && <ActivityIndicator style={{ flex: 5 }} size="large" color="blue" />}
             {!isLoading && <FlatList
-                ListEmptyComponent={renderView()}
+                ListEmptyComponent={renderView}
                 data={flatListData}
                 keyExtractor={(item) => item.category}
                 renderItem={({ item }) => (
