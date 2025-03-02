@@ -2,41 +2,30 @@ import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, View } from 're
 import React, { useEffect, useState } from 'react'
 import { useRoute } from '@react-navigation/native'
 import DummyJsonService from '../Service/DummyJsonService'
-import { H1 } from '../AppTheme';
+import { H1, H2, H3, H6, TextPrimary, TextSecondary, ThemeLightColors } from '../AppTheme';
 
 export default function SearchDetailsView({ navigation }) {
-        
+
     const [product, setResponseObj] = useState({});
     const [errorMessage, setErrorMessage] = useState("");
     const [loading, setLoading] = useState(true);
+    let route = useRoute();
 
 
-        let route = useRoute();
-        const id = route.params?.id
-
-        useEffect(() => {
-            if (id) {
-              getProductDetails();
-            } else {
-              setErrorMessage("Product ID is missing.");
-            }
-          }, [id]);
-
-
-    renderView = () => {
-        return (
-            <View>
-                <H1 textTitle={errorMessage} />
-            </View>
-        );
-    }
-
+    const id = route.params?.id
+    useEffect(() => {
+        if (id) {
+            getProductDetails();
+        } else {
+            setErrorMessage("Product ID is missing.");
+        }
+    }, [id]);
 
     getProductDetails = async () => {
         try {
             setLoading(true);
             const response = await DummyJsonService.get(`products/${id}`, {});
-            console.log("response: ", JSON.stringify(response.data))
+            // console.log("response: ", JSON.stringify(response.data))
             setResponseObj(response.data);
         }
         catch (error) {
@@ -48,75 +37,82 @@ export default function SearchDetailsView({ navigation }) {
         }
     }
 
+    renderView = () => {
+        return (
+            <View>
+                <H1 textTitle={errorMessage} />
+            </View>
+        );
+    }
 
-    if (loading) {
-        return <ActivityIndicator size="large" color="#0000ff" />;
-      }
+    const renderDetailsView = () => {
+        console.log("response: ", JSON.stringify(product));
 
+        return (
+            <ScrollView style={styles.container}>
+                {/* Title and Price */}
+                <View style={{ paddingBottom: 40 }}>
+                    <H1 textTitle={product.title} />
+                    <H2 textTitle={`$${product.price.toFixed(2)}`} />
+                    <TextSecondary textTitle={`Availability: ${product.availabilityStatus}`} />
+                    <TextSecondary textTitle={`SKU: ${product.sku}`} />
+
+                    {/* Images */}
+                    <ScrollView horizontal style={styles.imageScroll}>
+                        {product.images.map((image, index) => (
+                            <Image key={index} source={{ uri: image }} style={styles.image} />
+                        ))}
+                    </ScrollView>
+
+                    {/* Description */}
+                    <H3 textTitle="Description" />
+                    <TextPrimary textTitle={product.description} />
+
+                    {/* Specifications */}
+                    <H3 textTitle="Specifications" />
+                    <TextPrimary textTitle={`Category: ${product.category}`} />
+                    <TextPrimary textTitle={`Brand: ${product.brand}`} />
+                    <TextPrimary textTitle={`Dimensions: ${product.dimensions.width}" x ${product.dimensions.height}" x ${product.dimensions.depth}"`} />
+                    <TextPrimary textTitle={`Weight: ${product.weight} kg`} />
+                    <TextPrimary textTitle={`Warranty: ${product.warrantyInformation}`} />
+                    <TextPrimary textTitle={`Shipping: ${product.shippingInformation}`} />
+
+                    {/* Tags */}
+                    <View style ={{flexDirection:'row' }}>
+                        <H3 textTitle="Tags" />
+                        <View style ={{flexDirection:'row', alignItems:'center'}}>
+                            {product.tags.map((tag, index) => (
+                                <TextSecondary textStyle={{marginLeft:5, padding:3 ,borderWidth:0.5,borderRadius:3}} key={index} textTitle={tag} />
+                            ))}
+                        </View>
+                    </View>
+
+                    {/* Reviews */}
+                    <H3 textTitle="Reviews" />
+                    {product.reviews.map((review, index) => (
+                        <View style={{borderWidth:0.5}} key={index}>
+                            <TextPrimary textTitle={`${review.reviewerName} (${review.rating}/5):`} />
+                            <TextSecondary textTitle={review.comment} />
+                        </View>
+                    ))}
+
+                    {/* Footer */}
+                    <H3 textTitle="Additional Information" />
+                    <TextPrimary textTitle={`Return Policy: ${product.returnPolicy}`} />
+                </View>
+            </ScrollView>
+        );
+    }
 
     return (
         <View>
             {errorMessage && renderView()}
 
             {/* <Text>SearchDetailsView : {id} </Text> */}
-            <ScrollView style={styles.container}>
-            {/* Title and Price */}
-            <View style={{paddingBottom:40}}>
-            <Text style={styles.title}>{product.title}</Text>
-            {/* <Text style={styles.price}>${product.price.toFixed(2)}</Text> */}
-            <Text style={styles.stock}>Availability: {product.availabilityStatus}</Text>
-            <Text style={styles.sku}>SKU: {product.sku}</Text>
 
-            {/* Images */}
-            <ScrollView horizontal style={styles.imageScroll}>
-                {product.images.map((image, index) => (
-                    <Image key={index} source={{ uri: image }} style={styles.image} />
-                ))}
-            </ScrollView>
+            {loading && <ActivityIndicator style={{ flex: 1 }} size="large" color="#0000ff" />}
 
-            {/* Description */}
-            <Text style={styles.sectionTitle}>Description</Text>
-            <Text style={styles.text}>{product.description}</Text>
-
-            {/* Specifications */}
-            <Text style={styles.sectionTitle}>Specifications</Text>
-            <Text style={styles.text}>Category: {product.category}</Text>
-            <Text style={styles.text}>Brand: {product.brand}</Text>
-            <Text style={styles.text}>
-                Dimensions: {product.dimensions.width}" x {product.dimensions.height}" x{" "}
-                {product.dimensions.depth}"
-            </Text>
-            <Text style={styles.text}>Weight: {product.weight} kg</Text>
-            <Text style={styles.text}>Warranty: {product.warrantyInformation}</Text>
-            <Text style={styles.text}>Shipping: {product.shippingInformation}</Text>
-
-            {/* Tags */}
-            <Text style={styles.sectionTitle}>Tags</Text>
-            <View style={styles.tags}>
-                {product.tags.map((tag, index) => (
-                    <Text key={index} style={styles.tag}>
-                        {tag}
-                    </Text>
-                ))}
-            </View>
-
-            {/* Reviews */}
-            <Text style={styles.sectionTitle}>Reviews</Text>
-            {product.reviews.map((review, index) => (
-                <View key={index} style={styles.review}>
-                    <Text style={styles.reviewText}>
-                        {review.reviewerName} ({review.rating}/5):
-                    </Text>
-                    <Text style={styles.reviewText}>{review.comment}</Text>
-                </View>
-            ))}
-
-            {/* Footer */}
-            <Text style={styles.sectionTitle}>Additional Information</Text>
-            <Text style={styles.text}>Return Policy: {product.returnPolicy}</Text>
-            </View>
-           
-        </ScrollView>
+            {!loading && renderDetailsView()}
         </View>
     )
 }
@@ -177,7 +173,7 @@ export default function SearchDetailsView({ navigation }) {
 //     };
 
 //     return (
-       
+
 //     );
 // };
 
@@ -185,9 +181,10 @@ const styles = StyleSheet.create({
     container: {
         padding: 16,
         backgroundColor: "#fff",
-        paddingBottom:10
+        paddingBottom: 10,
     },
     title: {
+        color: ThemeLightColors.ColorBlack,
         fontSize: 22,
         fontWeight: "bold",
         marginBottom: 8,

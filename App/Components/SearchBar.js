@@ -8,6 +8,7 @@ export default function SearchBar({searchKeyWordValue ,onTextChange ,onTextSubmi
             <TextInput
                 value={searchKeyWordValue}
                 style = {{
+                    color:'black',
                     borderWidth:0.2,
                     borderRadius:5,
                     borderColor: 'black',
