@@ -7,3 +7,7 @@ export function getAllProduct(searchKeyWord){
 export function getAllProductCategory(){
     return dummyJsonClient.get('products/category-list', {});
 }
+
+export function getProductDetail(id){
+    return dummyJsonClient.get(`products/${id}`, {})
+}

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useRoute } from '@react-navigation/native'
 import DummyJsonService from '../Service/DummyJsonService'
 import { H1, H2, H3, H6, TextPrimary, TextSecondary, ThemeLightColors } from '../AppTheme';
+import { getProductDetail } from '../Service/lib/product';
 
 export default function SearchDetailsView({ navigation }) {
 
@@ -24,7 +25,8 @@ export default function SearchDetailsView({ navigation }) {
     getProductDetails = async () => {
         try {
             setLoading(true);
-            const response = await DummyJsonService.get(`products/${id}`, {});
+            // const response = await DummyJsonService.get(`products/${id}`, {});
+            const response = await getProductDetail(id);
             // console.log("response: ", JSON.stringify(response.data))
             setResponseObj(response.data);
         }
