@@ -5,6 +5,7 @@ import DummyJsonService from '../Service/DummyJsonService';
 import SearchResultList from '../Components/SearchResultList';
 import { H1 } from '../AppTheme';
 import { dummyJsonService } from '../Service/apiServices';
+import { getAllProduct, getAllProductCategory } from '../Service/lib/product';
 
 function SearchView(props) {
     const [searchKeyWord, setSearchKeyWord] = useState("");
@@ -12,8 +13,7 @@ function SearchView(props) {
     const [responseCategoryList, setCategoryList] = useState([]);
     const [errorMessage, setErrorMessage] = useState("");
     const [isLoading, setIsLoading] = useState(true);
-    const [hasError , setHasErrorOnRequest ] = useState(false);
-    // const [isCategoryLoading, setIsCategoryLoading] = useState(true);
+    const [hasError, setHasErrorOnRequest] = useState(false);
 
     useEffect(() => {
         getAllProductAndProductCategory()
@@ -25,43 +25,34 @@ function SearchView(props) {
         }
     }, [searchKeyWord]);
 
-
     const getAllProductAndProductCategory = async () => {
+
         setIsLoading(true);
         setHasErrorOnRequest(false);
-        const promiseProduct = dummyJsonService.get('products/search', {params: { q: searchKeyWord }});
-        const promiseCategory = dummyJsonService.get('products/category-list', {});
+
+        const promiseProduct = getAllProduct(searchKeyWord);
+        const promiseCategory = getAllProductCategory();
 
         await Promise.all([promiseProduct, promiseCategory])
             .then(([productResponse, categoryResponse]) => {
 
                 setResponseList(productResponse.data.products);
                 setCategoryList(categoryResponse.data);
-            
+
             }).catch((error) => {
+                
                 setErrorMessage(error.message);
                 setHasErrorOnRequest(true);
+
                 console.log("error!")
                 console.log("productResponse : ", error)
+
             })
             .finally(() => {
                 setIsLoading(false);
             });
     }
 
-    const getSearchedProductList = async () => {
-        try {
-            const response = await DummyJsonService.get('products/search', {
-                params: { q: searchKeyWord },
-            });
-            console.log(response.data.products)
-            setResponseList(response.data.products);
-        }
-        catch (error) {
-            setErrorMessage(`${error}`)
-        }
-    }
-    
     const flatListData = responseCategoryList.map(categoryItem => {
         const filteredProducts = responseList.filter(
             productItem => productItem.category === categoryItem
@@ -75,44 +66,32 @@ function SearchView(props) {
         return null;
     }).filter(item => item !== null);
 
-    const onPressTryAgain = () =>{
+    const onPressTryAgain = () => {
         setSearchKeyWord("")
         getAllProductAndProductCategory()
     }
 
-    const renderEmptyView = ()=>{
-        return(<View style={{flex:1}}>
-            <H1 textTitle={"No data found"}/>
+    const renderEmptyView = () => {
+        return (<View style={{ flex: 1 }}>
+            <H1 textTitle={"No data found"} />
             {renderButtonTryAgain()}
         </View>);
     }
 
-    const renderButtonTryAgain = ()=>{
-        return(  <Button  title='Try again' onPress={onPressTryAgain}/>);
+    const renderButtonTryAgain = () => {
+        return (<Button title='Try again' onPress={onPressTryAgain} />);
     }
 
-    const renderErrorMessage = () =>{
-        return(<View style ={{flex:1,alignItems:'center',}}>
-            <H1 textTitle={errorMessage}/>
+    const renderErrorMessage = () => {
+        return (<View style={{ flex: 1, alignItems: 'center', }}>
+            <H1 textTitle={errorMessage} />
             {renderButtonTryAgain()}
         </View>);
     }
 
-    return (
-        <View style={{ flex: 1, paddingLeft: 20, backgroundColor: 'white' }}>
-            <SearchBar
-                searchKeyWord={searchKeyWord}
-                onTextChange={(text) => setSearchKeyWord(text)}
-                onTextSubmitted={() => {
-                    getSearchedProductList()
-                }}
-                onPressResetButton= {onPressTryAgain}
-                resetButtonActiveStatus = {searchKeyWord.length >= 3? false :true }
-            />
-
-            {isLoading && <ActivityIndicator style={{ flex: 5 }} size="large" color="blue" />}
-            {hasError && !isLoading && renderErrorMessage()}
-            {!hasError && !isLoading && <FlatList
+    const renderFlatList = () =>{
+        return(
+            <FlatList
                 ListEmptyComponent={renderEmptyView()}
                 data={flatListData}
                 keyExtractor={(item) => item.category}
@@ -123,7 +102,25 @@ function SearchView(props) {
                         filteredProductList={item.filteredProducts}
                     />
                 )}
-            /> } 
+            />
+        );
+    }
+
+    return (
+        <View style={{ flex: 1, paddingLeft: 20, backgroundColor: 'white' }}>
+            <SearchBar
+                searchKeyWord={searchKeyWord}
+                onTextChange={(text) => setSearchKeyWord(text)}
+                onTextSubmitted={() => {
+                    getAllProductAndProductCategory()
+                }}
+                onPressResetButton={onPressTryAgain}
+                resetButtonActiveStatus={searchKeyWord.length >= 3 ? false : true}
+            />
+
+            { isLoading && <ActivityIndicator style={{ flex: 5 }} size="large" color="blue" />}
+            { hasError  && !isLoading && renderErrorMessage()}
+            { !hasError && !isLoading && renderFlatList()}
 
         </View>
     )
