@@ -1,9 +1,10 @@
-import { ActivityIndicator, FlatList, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { ActivityIndicator, Button, FlatList, ScrollView, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import SearchBar from '../Components/SearchBar'
 import DummyJsonService from '../Service/DummyJsonService';
 import SearchResultList from '../Components/SearchResultList';
 import { H1 } from '../AppTheme';
+import { dummyJsonService } from '../Service/apiServices';
 
 function SearchView(props) {
     const [searchKeyWord, setSearchKeyWord] = useState("");
@@ -11,6 +12,7 @@ function SearchView(props) {
     const [responseCategoryList, setCategoryList] = useState([]);
     const [errorMessage, setErrorMessage] = useState("");
     const [isLoading, setIsLoading] = useState(true);
+    const [hasError , setHasErrorOnRequest ] = useState(false);
     // const [isCategoryLoading, setIsCategoryLoading] = useState(true);
 
     useEffect(() => {
@@ -26,18 +28,19 @@ function SearchView(props) {
 
     const getAllProductAndProductCategory = async () => {
         setIsLoading(true);
-        const promiseProduct = DummyJsonService.get('products/searc', {params: { q: searchKeyWord }});
-        const promiseCategory = DummyJsonService.get('products/category-list', {});
+        setHasErrorOnRequest(false);
+        const promiseProduct = dummyJsonService.get('products/search', {params: { q: searchKeyWord }});
+        const promiseCategory = dummyJsonService.get('products/category-list', {});
 
         await Promise.all([promiseProduct, promiseCategory])
             .then(([productResponse, categoryResponse]) => {
-                console.log("productResponse : ", productResponse)
 
                 setResponseList(productResponse.data.products);
                 setCategoryList(categoryResponse.data);
             
             }).catch((error) => {
                 setErrorMessage(error.message);
+                setHasErrorOnRequest(true);
                 console.log("error!")
                 console.log("productResponse : ", error)
             })
@@ -58,15 +61,7 @@ function SearchView(props) {
             setErrorMessage(`${error}`)
         }
     }
-
-    const renderView = () => {
-        return (
-            <View style={{ flex: 1 }}>
-                <H1 textTitle={errorMessage}></H1>
-            </View>
-        );
-    }
-
+    
     const flatListData = responseCategoryList.map(categoryItem => {
         const filteredProducts = responseList.filter(
             productItem => productItem.category === categoryItem
@@ -78,9 +73,30 @@ function SearchView(props) {
             };
         }
         return null;
-    })
-        .filter(item => item !== null);
+    }).filter(item => item !== null);
 
+    const onPressTryAgain = () =>{
+        setSearchKeyWord("")
+        getAllProductAndProductCategory()
+    }
+
+    const renderEmptyView = ()=>{
+        return(<View style={{flex:1}}>
+            <H1 textTitle={"No data found"}/>
+            {renderButtonTryAgain()}
+        </View>);
+    }
+
+    const renderButtonTryAgain = ()=>{
+        return(  <Button  title='Try again' onPress={onPressTryAgain}/>);
+    }
+
+    const renderErrorMessage = () =>{
+        return(<View style ={{flex:1,alignItems:'center',}}>
+            <H1 textTitle={errorMessage}/>
+            {renderButtonTryAgain()}
+        </View>);
+    }
 
     return (
         <View style={{ flex: 1, paddingLeft: 20, backgroundColor: 'white' }}>
@@ -90,11 +106,14 @@ function SearchView(props) {
                 onTextSubmitted={() => {
                     getSearchedProductList()
                 }}
+                onPressResetButton= {onPressTryAgain}
+                resetButtonActiveStatus = {searchKeyWord.length >= 3? false :true }
             />
 
             {isLoading && <ActivityIndicator style={{ flex: 5 }} size="large" color="blue" />}
-            {!isLoading && <FlatList
-                ListEmptyComponent={renderView}
+            {hasError && !isLoading && renderErrorMessage()}
+            {!hasError && !isLoading && <FlatList
+                ListEmptyComponent={renderEmptyView()}
                 data={flatListData}
                 keyExtractor={(item) => item.category}
                 renderItem={({ item }) => (
