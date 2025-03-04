@@ -1,10 +1,8 @@
 import { ActivityIndicator, Button, FlatList, ScrollView, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import SearchBar from '../Components/SearchBar'
-import DummyJsonService from '../Service/DummyJsonService';
 import SearchResultList from '../Components/SearchResultList';
 import { H1 } from '../AppTheme';
-import { dummyJsonService } from '../Service/apiServices';
 import { getAllProduct, getAllProductCategory } from '../Service/lib/product';
 
 function SearchView(props) {
