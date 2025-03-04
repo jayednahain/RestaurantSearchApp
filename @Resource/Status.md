@@ -1,4 +1,5 @@
 130: local L adding context Blog
+running 
 
 1. https://www.youtube.com/watch?v=JQVBGtZMqgU&t=212s
 running - 1 :13 mint . authenticate .
