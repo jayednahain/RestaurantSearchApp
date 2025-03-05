@@ -9,12 +9,27 @@ export default function Login() {
   const [password, setPassword] = useState(null);
   const { setUser } = useContext(UserContext);
 
+  const handleOnPressSubmit = ()=>{
+    console.log("");
+    setUser({userName,password});
+  }
+
   return (
     <View>
-      <Text>Login</Text>
-      <TextInput style={{ borderWidth: 0.5, borderColor: 'black', padding: 5, margin: 5, color: "black" }} placeholder='user name' placeholderTextColor={"black"} />
-      <TextInput style={{ borderWidth: 0.5, borderColor: 'black', padding: 5, margin: 5, color: "black" }} placeholder='password' placeholderTextColor={"black"} />
-      <Button title='submit' />
+      <TextInput 
+        style={{ borderWidth: 0.5, borderColor: 'black', padding: 5, margin: 5, color: "black" }} 
+        placeholder='user name' 
+        placeholderTextColor={"black"}
+        onChangeText={value=>setUserName(value)}
+
+        />
+      <TextInput 
+        style={{ borderWidth: 0.5, borderColor: 'black', padding: 5, margin: 5, color: "black" }} 
+        placeholder='password' 
+        placeholderTextColor={"black"} 
+        onChangeText={value=>setPassword(value)}
+        />
+      <Button title='submit' onPress={handleOnPressSubmit} />
     </View>
   )
 }

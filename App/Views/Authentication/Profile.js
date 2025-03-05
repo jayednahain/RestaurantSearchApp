@@ -1,7 +1,9 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useContext } from 'react'
+import { UserContext } from '../../CustomContext'
 
 export default function Profile() {
+  const {user} = useContext(UserContext)
   return (
     <View>
       <Text>Profile</Text>
