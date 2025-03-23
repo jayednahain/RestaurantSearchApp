@@ -3,8 +3,7 @@ import React from 'react';
 
 export default function SearchBar({searchKeyWordValue ,onTextChange ,onTextSubmitted ,onPressResetButton ,resetButtonActiveStatus}) {
     return (
-        <View style ={{paddingRight:20, flexDirection:'row'}}> 
-            
+        <View style ={{paddingRight:20, flexDirection:'row'}}>         
             <TextInput
                 value={searchKeyWordValue}
                 style = {{
@@ -15,12 +14,10 @@ export default function SearchBar({searchKeyWordValue ,onTextChange ,onTextSubmi
                     borderColor: 'black',
                     paddingHorizontal: 20,
                     paddingVertical:10
-                    
                 }}
                 placeholder='Search Product'
                 onChangeText={onTextChange}
                 onEndEditing={onTextSubmitted}
-
             />
             <Button disabled={resetButtonActiveStatus} title='reset' onPress={onPressResetButton}/>
         </View>
