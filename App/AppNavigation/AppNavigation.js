@@ -3,9 +3,6 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import SearchView from "../Views/SearchView";
 import SearchDetailsView from "../Views/SearchDetailsView";
-import Login from "../Views/Authentication/Login";
-import Profile from "../Views/Authentication/Profile";
-import { AppProviders } from "../CustomContext";
 
 const Stack = createStackNavigator();
 
@@ -26,19 +23,8 @@ const navigationOption = (navigation) => {
 
 const AppNavigation = () => {
     return (
-        <AppProviders>
             <NavigationContainer>
-                <Stack.Navigator initialRouteName="Login">
-                    <Stack.Screen
-                        name="Login"
-                        component={Login}
-                        options={({ navigation }) => navigationOption(navigation)}
-                    />
-                    <Stack.Screen
-                        name="Profile"
-                        component={Profile}
-                        options={({ navigation }) => navigationOption(navigation)}
-                    />
+                <Stack.Navigator initialRouteName="SearchView">
                     <Stack.Screen
                         name="SearchView"
                         component={SearchView}
@@ -51,7 +37,6 @@ const AppNavigation = () => {
                     />
                 </Stack.Navigator>
             </NavigationContainer>
-        </AppProviders>
 
     );
 };
