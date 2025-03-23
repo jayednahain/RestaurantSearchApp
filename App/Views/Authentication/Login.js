@@ -2,12 +2,14 @@ import { Button, StyleSheet, Text, View } from 'react-native'
 import React, { useContext, useState } from 'react'
 import { TextInput } from 'react-native-gesture-handler'
 import { ContextProviderUser, UserContext } from '../../CustomContext';
+import { useUserAuth } from '../../CustomContext/ContextHook.js/useContextHook';
 
 export default function Login() {
 
   const [ userName , setUserName ] = useState(null);
   const [ password , setPassword ] = useState(null);
-  const { setUser } = useContext(UserContext);
+  // const { setUser } = useContext(UserContext);
+  const { setUser } = useUserAuth();
 
   const handleOnPressSubmit = () => {
     setUser({ userName, password });
@@ -28,6 +30,7 @@ export default function Login() {
         onChangeText={value => setPassword(value)}
       />
       <Button title='submit' onPress={handleOnPressSubmit} />
+      <Button title='switch theme' onPress={()=>{}} />
     </View>
   )
 }

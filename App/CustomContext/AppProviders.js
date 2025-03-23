@@ -1,15 +1,17 @@
 import React from "react";
-import ContextProviderUser from "./ContextProviderUser";
-import ContextProviderBlog from "./ContextProviderBlog";
+import { ContextProviderUser, ContextProviderBlog,  ContextProviderTheme } from "./ContextProvider";
 
 
 const AppProviders = ({ children }) => {
     return (
-        <ContextProviderUser>
-            <ContextProviderBlog>
-                {children}
-            </ContextProviderBlog>
-        </ContextProviderUser>
+        <ContextProviderTheme>
+            <ContextProviderUser>
+                <ContextProviderBlog>
+                    {children}
+                </ContextProviderBlog>
+            </ContextProviderUser>
+         </ContextProviderTheme>
+
     );
 };
 

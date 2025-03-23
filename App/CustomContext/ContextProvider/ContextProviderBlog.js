@@ -1,4 +1,4 @@
-import { BlogContext } from './ContextBuild';
+import { BlogContext } from '../ContextBuild';
 const ContextProviderBlog = ({children})=>{
     return <BlogContext.Provider>
         {children}
