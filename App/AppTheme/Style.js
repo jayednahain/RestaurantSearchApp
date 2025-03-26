@@ -1,7 +1,6 @@
 import { StyleSheet } from "react-native";
-import { UtilityFunctions } from "../UtilityFunctions/UtilityFunctions";
 import { ThemeLightColors } from "./Colors";
-
+import { UtilityFunctions } from "../UtilityFunctions/UtilityFunctions";
 
 var textStyleCommon = {
     includeFontPadding: false,
